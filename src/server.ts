@@ -5,7 +5,7 @@ const app = express();
 
 // route handler
 app.get("/", (request, response) => {
-    response.send("Up and running!");
+    response.send("This is the Space Facts API!");
 });
 
 // listen
