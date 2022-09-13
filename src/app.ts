@@ -4,8 +4,8 @@ import "express-async-errors"; //make sure the server is stable with no issues o
 const app = express();
 
 // route handler
-app.get("/", (request, response) => {
-    response.send("This is the Space Facts API!");
+app.get("/planets", (request, response) => {
+    response.json([{ name: "Mercury" }, { name: "Venus" }]);
 });
 
 export default app;
