@@ -5,7 +5,9 @@ const app = express();
 
 // route handler
 app.get("/planets", (request, response) => {
-    response.json([{ name: "Mercury" }, { name: "Venus" }]);
+    const planets = [{ name: "Mercury" }, { name: "Mars" }];
+    console.table(planets);
+    response.json(planets);
 });
 
 export default app;
