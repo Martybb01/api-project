@@ -2,6 +2,7 @@ import supertest from "supertest";
 import { prismaMock } from "./lib / prisma/client.mock";
 
 import app from "./app";
+import { text } from "stream/consumers";
 
 const request = supertest(app);
 
@@ -37,6 +38,51 @@ describe("GET /planets", () => {
             .expect("Content-Type", /application\/json/);
 
         expect(response.body).toEqual(planets);
+    });
+});
+
+describe("GET /planets/:id", () => {
+    test("Valid request", async () => {
+        const planet = {
+            id: 1,
+            name: "Mercury",
+            description: null,
+            diameter: 1234,
+            moons: 12,
+            createdAt: "2022-09-15T10:26:18.930Z",
+            updatedAt: "2022-09-15T10:25:48.293Z",
+        };
+
+        // @ts-ignore
+        prismaMock.planet.findUnique.mockResolvedValue(planet);
+
+        const response = await request
+            .get("/planets/1")
+            .expect(200)
+            .expect("Content-Type", /application\/json/);
+
+        expect(response.body).toEqual(planet);
+    });
+
+    test("Planet does not exist", async () => {
+        // @ts-ignore
+        prismaMock.planet.findUnique.mockResolvedValue(null);
+
+        const response = await request
+            .get("/planets/23")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot GET /planets/23");
+    });
+
+    test("Invalid planet ID", async () => {
+        const response = await request
+            .get("/planets/asdf")
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot GET /planets/asdf");
     });
 });
 

@@ -21,6 +21,22 @@ app.get("/planets", async (request, response) => {
     response.json(planets);
 });
 
+// GET /planet/:id - Retrieve the selected planet
+// Reg Exp = the id can be one or more digits (pattern matching)
+app.get("/planets/:id(\\d+)", async (request, response, next) => {
+    const planetId = Number(request.params.id);
+    const planet = await prisma.planet.findUnique({
+        where: { id: planetId },
+    });
+
+    if (!planet) {
+        response.status(404);
+        return next(`Cannot GET /planets/${planetId}`);
+    }
+
+    response.json(planet);
+});
+
 // POST - create a new planet
 app.post(
     "/planets",
