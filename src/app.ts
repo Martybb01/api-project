@@ -1,5 +1,6 @@
 import express from "express";
 import "express-async-errors"; //make sure the server is stable with no issues or crash when using async/await
+import { nextTick } from "process";
 import prisma from "./lib / prisma/client";
 
 import {
@@ -49,6 +50,28 @@ app.post(
         });
 
         response.status(201).json(planet);
+    }
+);
+
+// PUT - update a planet
+app.put(
+    "/planets/:id(\\d+)",
+    validate({ body: planetSchema }),
+    async (request, response, next) => {
+        const planetId = Number(request.params.id);
+        const planetData: PlanetData = request.body;
+
+        try {
+            const planet = await prisma.planet.update({
+                where: { id: planetId },
+                data: planetData,
+            });
+
+            response.status(200).json(planet);
+        } catch (error) {
+            response.status(404);
+            next(`Cannot PUT /planets/${planetId}`);
+        }
     }
 );
 
