@@ -2,6 +2,13 @@ import express from "express";
 import "express-async-errors"; //make sure the server is stable with no issues or crash when using async/await
 import prisma from "./lib / prisma/client";
 
+import {
+    validate,
+    validationErrorMiddleWare,
+    planetSchema,
+    PlanetData,
+} from "./lib /validation";
+
 const app = express();
 
 // built-in middleware that take the incoming json and parse it in an object
@@ -15,10 +22,17 @@ app.get("/planets", async (request, response) => {
 });
 
 // POST - create a new planet
-app.post("/planets", async (request, response) => {
-    const planet = request.body;
+app.post(
+    "/planets",
+    validate({ body: planetSchema }),
+    async (request, response) => {
+        const planet: PlanetData = request.body;
 
-    response.status(201).json(planet);
-});
+        response.status(201).json(planet);
+    }
+);
+
+// always define errors middleware after the routes
+app.use(validationErrorMiddleWare);
 
 export default app;
