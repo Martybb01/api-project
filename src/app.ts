@@ -1,6 +1,7 @@
 import express from "express";
 import "express-async-errors"; //make sure the server is stable with no issues or crash when using async/await
 import prisma from "./lib / prisma/client";
+import cors from "cors";
 
 import {
     validate,
@@ -13,6 +14,11 @@ const app = express();
 
 // built-in middleware that take the incoming json and parse it in an object
 app.use(express.json());
+
+const corsOptions = {
+    origin: "http://localhost:8080",
+};
+app.use(cors(corsOptions));
 
 // GET /planets - Retrieve all planets
 app.get("/planets", async (request, response) => {
