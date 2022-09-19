@@ -10,10 +10,14 @@ import {
     PlanetData,
 } from "./lib /validation";
 
+import { initMulterMiddleware } from "./lib /middleware/multer";
+
 const app = express();
 
 // built-in middleware that take the incoming json and parse it in an object
 app.use(express.json());
+
+const upload = initMulterMiddleware();
 
 const corsOptions = {
     origin: "http://localhost:8080",
@@ -97,6 +101,23 @@ app.delete(
             response.status(404);
             next(`Cannot DELETE /planets/${planetId}`);
         }
+    }
+);
+
+// POST - upload a planet
+app.post(
+    "/planets/:id(\\d+)/photo",
+    upload.single("photo"), // same as input name on upload.html
+    async (request, response, next) => {
+        console.log("request.file", request.file);
+
+        if (!request.file) {
+            response.status(400);
+            return next("No photo file uploaded.");
+        }
+
+        const photoFilename = request.file.filename;
+        response.status(201).json({ photoFilename });
     }
 );
 
