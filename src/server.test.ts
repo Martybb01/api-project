@@ -1,8 +1,8 @@
 import supertest from "supertest";
 import { prismaMock } from "./lib / prisma/client.mock";
 import path from "node:path";
-
 import app from "./app";
+import { json } from "stream/consumers";
 
 const request = supertest(app);
 
@@ -258,6 +258,22 @@ describe("POST /planets/:id/photo", () => {
             )
             .expect(201)
             .expect("Access-Control-Allow-Origin", "http://localhost:8080");
+    });
+
+    test("Planet doesn not exist", async () => {
+        // @ts-ignore
+        prismaMock.planet.update.mockRejectedValue(new Error("Error"));
+
+        const response = await request
+            .post("/planets/23/photo")
+            .attach(
+                "photo",
+                path.join(__dirname, `/../test-fixtures/photos/file.png`)
+            )
+            .expect(404)
+            .expect("Content-Type", /text\/html/);
+
+        expect(response.text).toContain("Cannot POST /planets/23/photo");
     });
 
     test("Invalid planet ID", async () => {
