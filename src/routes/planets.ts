@@ -1,7 +1,11 @@
 import express, { Router } from "express";
 import prisma from "../lib / prisma/client";
 
-import { validate, planetSchema, PlanetData } from "../lib /validation";
+import {
+    validate,
+    planetSchema,
+    PlanetData,
+} from "../lib /middleware/validation";
 
 import { initMulterMiddleware } from "../lib /middleware/multer";
 
