@@ -2,7 +2,6 @@ import supertest from "supertest";
 import { prismaMock } from "./lib / prisma/client.mock";
 import path from "node:path";
 import app from "./app";
-import { response } from "express";
 
 const request = supertest(app);
 
