@@ -1,7 +1,7 @@
 import supertest from "supertest";
-import { prismaMock } from "./lib / prisma/client.mock";
+import { prismaMock } from "../lib / prisma/client.mock";
 import path from "node:path";
-import app from "./app";
+import app from "../app";
 
 const request = supertest(app);
 
@@ -253,7 +253,7 @@ describe("POST /planets/:id/photo", () => {
             .post("/planets/23/photo")
             .attach(
                 "photo",
-                path.join(__dirname, `/../test-fixtures/photos/file.png`)
+                path.join(__dirname, `../../test-fixtures/photos/file.png`)
             )
             .expect(201)
             .expect("Access-Control-Allow-Origin", "http://localhost:8080");
@@ -264,7 +264,7 @@ describe("POST /planets/:id/photo", () => {
             .post("/planets/23/photo")
             .attach(
                 "photo",
-                path.join(__dirname, `/../test-fixtures/photos/file.jpg`)
+                path.join(__dirname, `../../test-fixtures/photos/file.jpg`)
             )
             .expect(201)
             .expect("Access-Control-Allow-Origin", "http://localhost:8080");
@@ -275,7 +275,7 @@ describe("POST /planets/:id/photo", () => {
             .post("/planets/23/photo")
             .attach(
                 "photo",
-                path.join(__dirname, `/../test-fixtures/photos/file.txt`)
+                path.join(__dirname, `../../test-fixtures/photos/file.txt`)
             )
             .expect(500)
             .expect("Content-Type", /text\/html/);
@@ -293,7 +293,7 @@ describe("POST /planets/:id/photo", () => {
             .post("/planets/23/photo")
             .attach(
                 "photo",
-                path.join(__dirname, `/../test-fixtures/photos/file.png`)
+                path.join(__dirname, `../../test-fixtures/photos/file.png`)
             )
             .expect(404)
             .expect("Content-Type", /text\/html/);
