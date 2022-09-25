@@ -4,11 +4,17 @@ import { validationErrorMiddleWare } from "./lib /middleware/validation";
 
 import planetsRoutes from "./routes/planets";
 import { initCorsMiddleware } from "./lib /middleware/cors";
+import { initSessionMiddleware } from "./lib /middleware/session";
+import { passport } from "./lib /middleware/passport";
 
 const app = express();
 
 // built-in middleware that take the incoming json and parse it in an object
 app.use(express.json());
+
+app.use(initSessionMiddleware());
+app.use(passport.initialize());
+app.use(passport.session()); //handle serializing and deserializing user data after a user is logged in
 
 app.use(initCorsMiddleware());
 
