@@ -6,6 +6,7 @@ import planetsRoutes from "./routes/planets";
 import { initCorsMiddleware } from "./lib /middleware/cors";
 import { initSessionMiddleware } from "./lib /middleware/session";
 import { passport } from "./lib /middleware/passport";
+import authRoutes from "./routes/auth";
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(initCorsMiddleware());
 
 // everything under planetsRoutes will be prefixed with route /planets
 app.use("/planets", planetsRoutes);
+app.use("/auth", authRoutes);
 
 // always define errors middleware after the routes
 app.use(validationErrorMiddleWare);
