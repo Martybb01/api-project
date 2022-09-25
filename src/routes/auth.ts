@@ -19,7 +19,7 @@ router.get("/login", (request, response, next) => {
 
 // route to login page
 router.get(
-    "/auth/github/login",
+    "/github/login",
     passport.authenticate("github", {
         scope: ["user:email"],
     })
@@ -28,6 +28,7 @@ router.get(
 //route to redirect after the user logged in
 router.get(
     "/github/callback",
+    // @ts-ignore
     passport.authenticate("github", {
         failureRedirect: "/auth/github/login",
         keepSessionInfo: true,

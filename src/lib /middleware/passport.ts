@@ -1,5 +1,6 @@
 import passport from "passport";
 import passportGitHub2 from "passport-github2";
+import { RequestHandler } from "express";
 import config from "../../config";
 
 // strategy = term that passport use to indicate different way of authentication
@@ -30,4 +31,11 @@ passport.serializeUser<Express.User>((user, done) => done(null, user));
 
 passport.deserializeUser<Express.User>((user, done) => done(null, user));
 
-export { passport };
+const checkAuthorization: RequestHandler = (request, response, next) => {
+    if (request.isAuthenticated()) {
+        return next(); //everything is fine because the user is authorized
+    }
+    response.status(401).end();
+};
+
+export { passport, checkAuthorization };
